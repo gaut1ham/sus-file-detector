@@ -1,0 +1,28 @@
+# Educational purpose only
+# Suspicious File Detector
+
+import os
+from pathlib import Path
+
+FOLDER = input("Enter folder path to scan: ")
+
+print("\n🔍 Scanning...\n")
+
+for file in Path(FOLDER).iterdir():
+    if file.is_file():
+        name = file.name
+        size = file.stat().st_size / (1024 * 1024)
+
+        alerts = []
+
+        if name.count(".") >= 2:
+            alerts.append("Double extension")
+
+        if name.startswith("."):
+            alerts.append("Hidden file")
+
+        if size > 50 and file.suffix in [".exe", ".bat", ".sh"]:
+            alerts.append("Large executable")
+
+        if alerts:
+            print(f"⚠️ {name} → {', '.join(alerts)}")
